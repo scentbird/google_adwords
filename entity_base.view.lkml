@@ -4,7 +4,7 @@ view: ad_criterion_base {
   dimension: unique_key {
     type:  string
     hidden: yes
-    sql: CONCAT(CAST(${ad_group_id} AS STRING),CAST(${criterion_id} AS STRING)) ;;
+    sql: CONCAT(CAST(${ad_group_id} AS TEXT),CAST(${criterion_id} AS TEXT)) ;;
   }
 }
 
@@ -48,17 +48,16 @@ view: base {
     group_label: "Data Date"
     label: "Day of Quarter"
     type: number
-    sql: DATE_DIFF(
+    sql: DATE_DIFF('DAY',
            ${_data_date},
-          CAST(CONCAT(${_data_quarter}, '-01') as DATE),
-          day) + 1
+          CAST(CONCAT(${_data_quarter}, '-01') as DATE)) + 1
        ;;
   }
 
   dimension: current_day_of_quarter {
     hidden: yes
     type:  number
-    sql: DATE_DIFF(CURRENT_DATE(), DATE_TRUNC(CURRENT_DATE(), QUARTER), DAY) ;;
+    sql: DATE_DIFF('DAY', CURRENT_DATE, DATE_TRUNC('QUARTER', CURRENT_DATE)) ;;
   }
 
   dimension: less_than_current_day_of_quarter {
@@ -69,7 +68,7 @@ view: base {
   dimension: _data_next_quarter {
     hidden: yes
     type: date
-    sql: DATE_ADD(CAST(CONCAT(${_data_quarter}, '-01') as DATE), INTERVAL 1 QUARTER) ;;
+    sql: DATE_ADD('QUARTER', 1, CAST(CONCAT(${_data_quarter}, '-01') as DATE)) ;;
   }
 
   dimension:  _data_days_in_quarter {
@@ -134,24 +133,24 @@ view: base {
   dimension: device_type {
     type: string
     sql:  CASE
-      WHEN ${device} LIKE '%Desktop%' THEN "Desktop"
-      WHEN ${device} LIKE '%Mobile%' THEN "Mobile"
-      WHEN ${device} LIKE '%Tablet%' THEN "Tablet"
-      ELSE "Unknown" END;;
+      WHEN ${device} LIKE '%Desktop%' THEN 'Desktop'
+      WHEN ${device} LIKE '%Mobile%' THEN 'Mobile'
+      WHEN ${device} LIKE '%Tablet%' THEN 'Tablet'
+      ELSE 'Unknown' END;;
   }
 }
 
 
 view: ad {
   extends: [entity_base]
-  sql_table_name: adwords_v201609.Ad_6747157124 ;;
+  sql_table_name: google_analytics.Ad ;;
 
   dimension: _data {
-    sql: TIMESTAMP(${TABLE}._DATA_DATE) ;;
+    sql: ${TABLE}._DATA_DATE ;;
   }
 
   dimension: _latest {
-    sql: TIMESTAMP(${TABLE}._LATEST_DATE) ;;
+    sql: ${TABLE}._LATEST_DATE ;;
   }
 
   dimension: ad_group_ad_disapproval_reasons {
@@ -347,14 +346,14 @@ view: ad {
 
   dimension: creative {
     type: string
-    sql: CONCAT(
-      COALESCE(CONCAT(${headline}, "\n"),"")
-      , COALESCE(CONCAT(${headline_part1}, "\n"),"")
-      , COALESCE(CONCAT(${headline_part2}, "\n"),"")
-      , COALESCE(CONCAT(${description}, "\n"),"")
-      , COALESCE(CONCAT(${description1}, "\n"),"")
-      , COALESCE(CONCAT(${description2}, "\n"),"")
-      ) ;;
+    sql:
+      COALESCE(CONCAT(${headline}, chr(10)),'')
+      || COALESCE(CONCAT(${headline_part1}, chr(10)),'')
+      || COALESCE(CONCAT(${headline_part2}, chr(10)),'')
+      || COALESCE(CONCAT(${description}, chr(10)),'')
+      || COALESCE(CONCAT(${description1}, chr(10)),'')
+      || COALESCE(CONCAT(${description2}, chr(10)),'')
+       ;;
     link: {
       url: "https://adwords.google.com"
       icon_url: "https://www.gstatic.com/awn/awsm/brt/awn_awsm_20171108_RC00/aw_blend/favicon.ico"
@@ -365,8 +364,8 @@ view: ad {
   dimension: display_headline {
     type: string
     sql: CONCAT(
-      COALESCE(CONCAT(${headline}, "\n"),"")
-      , COALESCE(CONCAT(${headline_part1}, "\n"),"")) ;;
+      COALESCE(CONCAT(${headline}, chr(10)),'')
+      , COALESCE(CONCAT(${headline_part1}, chr(10)),'')) ;;
   }
 
   measure: count {
@@ -384,14 +383,14 @@ view: ad {
 
 view: ad_group {
   extends: [entity_base]
-  sql_table_name: adwords_v201609.AdGroup_6747157124 ;;
+  sql_table_name: google_analytics.AdGroup ;;
 
   dimension: _data {
-    sql: TIMESTAMP(${TABLE}._DATA_DATE) ;;
+    sql: ${TABLE}._DATA_DATE ;;
   }
 
   dimension: _latest {
-    sql: TIMESTAMP(${TABLE}._LATEST_DATE) ;;
+    sql: ${TABLE}._LATEST_DATE ;;
   }
 
   dimension: ad_group_desktop_bid_modifier {
@@ -566,21 +565,21 @@ view: ad_group {
 
 view: audience {
   extends: [entity_base]
-  sql_table_name: adwords_v201609.Audience_6747157124 ;;
+  sql_table_name: google_analytics.Audience ;;
 
   dimension: _data {
-    sql: TIMESTAMP(${TABLE}._DATA_DATE) ;;
+    sql: ${TABLE}._DATA_DATE ;;
   }
 
   dimension: _latest {
-    sql: TIMESTAMP(${TABLE}._LATEST_DATE) ;;
+    sql: ${TABLE}._LATEST_DATE ;;
   }
 
   dimension: unique_key {
     type: string
     primary_key: yes
     hidden: yes
-    sql: CONCAT(CAST(${ad_group_id} AS STRING),CAST(${criterion_id} AS STRING)) ;;
+    sql: CONCAT(CAST(${ad_group_id} AS TEXT),CAST(${criterion_id} AS TEXT)) ;;
   }
 
   dimension: ad_group_id {
@@ -714,14 +713,14 @@ view: audience {
 
 view: customer {
   extends: [entity_base]
-  sql_table_name: adwords_v201609.Customer_6747157124 ;;
+  sql_table_name: google_analytics.Customer ;;
 
   dimension: _data {
-    sql: TIMESTAMP(${TABLE}._DATA_DATE) ;;
+    sql: ${TABLE}._DATA_DATE ;;
   }
 
   dimension: _latest {
-    sql: TIMESTAMP(${TABLE}._LATEST_DATE) ;;
+    sql: ${TABLE}._LATEST_DATE ;;
   }
 
   dimension: account_currency_code {
@@ -789,14 +788,14 @@ view: customer {
 
 view: campaign {
   extends: [entity_base]
-  sql_table_name: adwords_v201609.Campaign_6747157124 ;;
+  sql_table_name: google_analytics.Campaign ;;
 
   dimension: _data {
-    sql: TIMESTAMP(${TABLE}._DATA_DATE) ;;
+    sql: ${TABLE}._DATA_DATE ;;
   }
 
   dimension: _latest {
-    sql: TIMESTAMP(${TABLE}._LATEST_DATE) ;;
+    sql: ${TABLE}._LATEST_DATE ;;
   }
 
   dimension: advertising_channel_sub_type {
@@ -814,10 +813,10 @@ view: campaign {
     sql: ${TABLE}.Amount ;;
   }
 
-  dimension: bid_type {
-    type: string
-    sql: ${TABLE}.BidType ;;
-  }
+  #dimension: bid_type {
+  #  type: string
+  #  sql: ${TABLE}.BidType ;;
+  #}
 
   dimension: bidding_strategy_id {
     type: number
@@ -990,14 +989,14 @@ view: campaign {
 
 view: keyword {
   extends: [ad_criterion_base, entity_base]
-  sql_table_name: adwords_v201609.Keyword_6747157124 ;;
+  sql_table_name: google_analytics.Keyword ;;
 
   dimension: _data {
-    sql: TIMESTAMP(${TABLE}._DATA_DATE) ;;
+    sql: ${TABLE}._DATA_DATE ;;
   }
 
   dimension: _latest {
-    sql: TIMESTAMP(${TABLE}._LATEST_DATE) ;;
+    sql: ${TABLE}._LATEST_DATE ;;
   }
 
   dimension: ad_group_id {

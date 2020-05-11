@@ -24,7 +24,7 @@ view: base_quarter_stats {
   }
   dimension: _data_last_quarter {
     type: date_quarter
-    sql: DATE_ADD(CAST(CONCAT(${_data_quarter}, '-01') AS DATE), INTERVAL -1 QUARTER) ;;
+    sql: DATE_ADD('QUARTER', -1, CAST(CONCAT(${_data_quarter}, '-01') AS DATE)) ;;
   }
   measure: total_impressions {
     drill_fields: [total_impressions]
@@ -63,6 +63,7 @@ view: account_quarter_stats {
   extends: [stats, base_quarter_stats]
 
   derived_table: {
+    distribution_style: all
     persist_for: "24 hours"
     explore_source: master_stats {
       column: _data_quarter {}
@@ -119,6 +120,7 @@ view: campaign_quarter_stats {
 
   derived_table: {
     persist_for: "24 hours"
+    distribution_style: all
     explore_source: master_stats {
       column: _data_quarter {}
       column: campaign_id {}

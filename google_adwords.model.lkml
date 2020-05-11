@@ -1,10 +1,10 @@
-connection: "bigquery-connectors-adwords"
+connection: "scentbird_redshift_stage"
 
 # include all the views
 include: "*.view"
 
 # include all the explores
-include: "*.explore"
+#include: "*.explore"
 
 # include all the dashboards
 include: "*.dashboard"
