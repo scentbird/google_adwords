@@ -139,28 +139,28 @@ view: master_stats {
 
   sql_table_name:
   {% if (ad._in_query or master_stats.creative_id._in_query) %}
-    google_analytics.AdBasicStats
+    google_ads.AdBasicStats
   {% elsif (audience._in_query or master_stats.audience_criterion_id._in_query) %}
-    google_analytics.AudienceBasicStats
+    google_ads.AudienceBasicStats
   {% elsif (keyword._in_query or master_stats.criteria_id._in_query) %}
-    google_analytics.KeywordBasicStats
+    google_ads.KeywordBasicStats
   {% elsif (ad_group._in_query or master_stats.ad_group_id._in_query) %}
     {% if master_stats.hour_of_day._in_query %}
-      google_analytics.HourlyAdGroupStats
+      google_ads.HourlyAdGroupStats
     {% else %}
-      google_analytics.AdGroupBasicStats
+      google_ads.AdGroupBasicStats
     {% endif %}
   {% elsif (campaign._in_query or master_stats.campaign_id._in_query) %}
     {% if master_stats.hour_of_day._in_query %}
-      google_analytics.HourlyCampaignStats
+      google_ads.HourlyCampaignStats
     {% else %}
-      google_analytics.CampaignBasicStats
+      google_ads.CampaignBasicStats
     {% endif %}
   {% else %}
     {% if master_stats.hour_of_day._in_query %}
-      google_analytics.HourlyAccountStats
+      google_ads.HourlyAccountStats
     {% else %}
-      google_analytics.AccountBasicStats
+      google_ads.AccountBasicStats
     {% endif %}
   {% endif %} ;;
 
