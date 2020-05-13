@@ -143,7 +143,7 @@ view: base {
 
 view: ad {
   extends: [entity_base]
-  sql_table_name: google_analytics.Ad ;;
+  sql_table_name: google_ads.Ad ;;
 
   dimension: _data {
     sql: ${TABLE}._DATA_DATE ;;
@@ -383,7 +383,7 @@ view: ad {
 
 view: ad_group {
   extends: [entity_base]
-  sql_table_name: google_analytics.AdGroup ;;
+  sql_table_name: google_ads.AdGroup ;;
 
   dimension: _data {
     sql: ${TABLE}._DATA_DATE ;;
@@ -565,7 +565,7 @@ view: ad_group {
 
 view: audience {
   extends: [entity_base]
-  sql_table_name: google_analytics.Audience ;;
+  sql_table_name: google_ads.Audience ;;
 
   dimension: _data {
     sql: ${TABLE}._DATA_DATE ;;
@@ -713,7 +713,7 @@ view: audience {
 
 view: customer {
   extends: [entity_base]
-  sql_table_name: google_analytics.Customer ;;
+  sql_table_name: google_ads.Customer ;;
 
   dimension: _data {
     sql: ${TABLE}._DATA_DATE ;;
@@ -788,7 +788,7 @@ view: customer {
 
 view: campaign {
   extends: [entity_base]
-  sql_table_name: google_analytics.Campaign ;;
+  sql_table_name: google_ads.Campaign ;;
 
   dimension: _data {
     sql: ${TABLE}._DATA_DATE ;;
@@ -989,7 +989,7 @@ view: campaign {
 
 view: keyword {
   extends: [ad_criterion_base, entity_base]
-  sql_table_name: google_analytics.Keyword ;;
+  sql_table_name: google_ads.Keyword ;;
 
   dimension: _data {
     sql: ${TABLE}._DATA_DATE ;;
